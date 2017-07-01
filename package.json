@@ -1,0 +1,15 @@
+{
+  "name": "Peeper",
+  "version": "0.0.1",
+  "description": "Finding a place to live with javascript",
+  "main": "index.js",
+  "repository": "https://www.github.com/ryanquinn3/peeper",
+  "author": "Ryan Quinn",
+  "license": "MIT",
+  "dependencies": {
+    "scrape-it": "^3.3.2"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
