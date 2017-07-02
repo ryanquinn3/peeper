@@ -4,8 +4,6 @@ const { prop, map, compose, trim } = require('ramda');
 const baseUrl = 'https://sfbay.craigslist.org';
 const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_bedrooms=1&availabilityMode=0&laundry=1&laundry=4`;
 
-//const exListing = 'https://sfbay.craigslist.org/sfc/apa/6201891273.html';
-
 async function scrapeFromDetailPage(url){
   const scrapeDetails = await scrape(url, {
     title: '#titletextonly',
