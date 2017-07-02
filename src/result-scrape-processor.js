@@ -39,12 +39,12 @@ function defaultResultRow() {
     Comments: '',
     Contact: '',
     Viewing: '',
-    Available: ''
+    Available: '',
   }
 }
 
 (async() => {
-  await useServiceAccountAuth(require('../google_keys.json'));
+ await useServiceAccountAuth(require('../google_keys.json'));
   const info = await getInfo();
   const [ results, scrapes ] = info.worksheets;
 
@@ -67,7 +67,10 @@ function defaultResultRow() {
     if (newListSet.has(row.id)) {
     }
   }
-  console.log(results)
-  console.log(resultRows)
-  //results.addRow({})
+
+  var newRow = defaultResultRow();
+  Object.assign(newRow, {ID: 888});
+  console.log(newRow)
+
+  GoogleSpreadsheet.addRow(results, newRow)
 })();

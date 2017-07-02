@@ -1,7 +1,7 @@
 const scrapeListings = require('./src/scrape');
 const { writeObjectToFile } = require('./src/persist');
-(async()=>{
-
+const normalizeScrape = require('./src/normalize-scrape.js');
+(async()=> {
   let scraped;
   try {
     scraped = require('./scraped.json');
