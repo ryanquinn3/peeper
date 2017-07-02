@@ -4,11 +4,10 @@ const { prop, map, compose, trim } = require('ramda');
 const baseUrl = 'https://sfbay.craigslist.org';
 const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_bedrooms=1&availabilityMode=0&laundry=1&laundry=4`;
 
-const exListing = 'https://sfbay.craigslist.org/sfc/apa/6201891273.html';
+//const exListing = 'https://sfbay.craigslist.org/sfc/apa/6201891273.html';
 
 async function scrapeFromDetailPage(url){
-
-  const scrapeResults = await scrape(exListing, {
+  const scrapeDetails = await scrape(url, {
     title: '#titletextonly',
     price: '.postingtitletext .price',
     attributes: {
@@ -28,7 +27,7 @@ async function scrapeFromDetailPage(url){
       listItem: 'p.postinginfo',
     }
   });
-  return scrapeResults;
+  return Object.assign(scrapeDetails, { url });
 
 }
 async function scrapeListings(){
@@ -54,9 +53,11 @@ async function scrapeListings(){
   return addBaseUrlsToResults(apartments);
 }
 
+module.exports = async () => {
+  const postingsList = await scrapeListings();
 
+  const detailPromises = postingsList.map(scrapeFromDetailPage);
 
-(async() => {
-  //console.log(await scrapeListings());
-  console.log(await scrapeFromDetailPage());
-})();
+  return await Promise.all(detailPromises);
+
+};
