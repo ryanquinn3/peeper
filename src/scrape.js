@@ -8,7 +8,9 @@ const trimNewlines = (text) => text.replace(/(?:\r\n|\r|\n)/g, '');
 
 const clean = (text) => text.replace(/\s{2,}/g, ' ');
 
-const fullTrim = compose(clean, trimNewlines);
+const removeGoogleMaps = (text) => text.replace('(google maps)', '');
+
+const fullTrim = compose(removeGoogleMaps, clean, trimNewlines);
 
 async function scrapeFromDetailPage(url){
   const scrapeDetails = await scrape(url, {
