@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "google-spreadsheet": "^2.0.4",
+    "ramda": "^0.24.1",
     "scrape-it": "^3.3.2"
   },
   "scripts": {

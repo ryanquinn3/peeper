@@ -1,15 +1,41 @@
 const scrape = require('scrape-it');
+const { prop, map, compose, trim } = require('ramda');
 
-const searchUrl = 'https://sfbay.craigslist.org/search/sfc/apa?nh=12&max_price=4000&availabilityMode=0&laundry=1';
+const baseUrl = 'https://sfbay.craigslist.org';
+const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_bedrooms=1&availabilityMode=0&laundry=1&laundry=4`;
 
-async function performSearch(){
+const exListing = 'https://sfbay.craigslist.org/sfc/apa/6201891273.html';
 
-  const page = await scrape(searchUrl, {
+async function scrapeFromDetailPage(url){
+
+  const scrapeResults = await scrape(exListing, {
+    title: '#titletextonly',
+    price: '.postingtitletext .price',
+    attributes: {
+      listItem: 'p.attrgroup span',
+      convert: trim
+    },
+    images: {
+      listItem: 'a.thumb',
+      data: {
+        link: {
+          attr: 'href',
+        },
+      },
+    },
+    body: '#postingbody',
+    postInfo: {
+      listItem: 'p.postinginfo',
+    }
+  });
+  return scrapeResults;
+
+}
+async function scrapeListings(){
+  const { apartments } = await scrape(searchUrl, {
     apartments: {
       listItem: '.result-row',
       data: {
-        price: '.result-price',
-        housing: '.housing',
         link: {
           selector: ".result-title",
           attr: "href",
@@ -17,10 +43,20 @@ async function performSearch(){
       }
     }
   });
+  console.log(`Total results: ${apartments.length}`);
+  const addBase = (url) => `${baseUrl}${url}`;
 
+  const addBaseUrlsToResults = compose(
+    map(addBase),
+    map(prop('link')),
+  );
+
+  return addBaseUrlsToResults(apartments);
 }
 
-performSearch()
-  .then(() => {
 
-  });
+
+(async() => {
+  //console.log(await scrapeListings());
+  console.log(await scrapeFromDetailPage());
+})();
