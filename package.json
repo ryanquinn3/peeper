@@ -7,6 +7,7 @@
   "author": "Ryan Quinn",
   "license": "MIT",
   "dependencies": {
+    "google-spreadsheet": "^2.0.4",
     "scrape-it": "^3.3.2"
   },
   "scripts": {

@@ -1,6 +1,5 @@
 const scrape = require('scrape-it');
 
-
 const searchUrl = 'https://sfbay.craigslist.org/search/sfc/apa?nh=12&max_price=4000&availabilityMode=0&laundry=1';
 
 async function performSearch(){
@@ -17,11 +16,8 @@ async function performSearch(){
         }
       }
     }
-
-
   });
 
-  console.log(page);
 }
 
 performSearch()
