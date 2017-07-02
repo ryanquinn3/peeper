@@ -11,7 +11,9 @@ const normalizeScrape = require('./src/normalize-scrape.js');
     scraped = await scrapeListings();
     await writeObjectToFile('./scraped.json', scraped);
   }
-  
+  const listings = await normalizeScrape(scraped);
+  await writeObjectToFile('./listings.json', {listings});
+
 })()
 
 

@@ -3,7 +3,6 @@ function defaultListing() {
     id: 999,
     alerted: 'N',
     status: 'Open',
-    gif: '',
     url: '',
     title: '',
     address: '',
@@ -17,9 +16,6 @@ function defaultListing() {
     parking: 'N',
     dogs: 'N',
     other: '',
-    comments: '',
-    contact: '',
-    viewing: '',
     available: '',
     latitude: '',
     longitude: '',
@@ -66,8 +62,8 @@ function cleanListing(rawListing){
   rawListing.body = rawListing.body.replace(/\\\\n/g, "*");
   var newListing = defaultListing();
   const attributes = handleAttributes(rawListing.attributes);
-
-  Object.assign(newListing,
+  
+  return Object.assign(newListing,
     attributes,
     {
       title: rawListing.title,
@@ -84,9 +80,8 @@ function cleanListing(rawListing){
   );
 }
 
-
 module.exports = async (rawListings) => {
-  const test = rawListings.slice(1,2);
-  const ret_test = test.map(cleanListing);
-  return ret_test
+  const cleaned = rawListings.map(cleanListing);
+  console.log('Finished normalizing', cleaned.length);
+  return cleaned
 };

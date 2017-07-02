@@ -3,3 +3,4 @@ node_modules
 sandbox
 google_keys.json
 scraped.json
+listings.json
