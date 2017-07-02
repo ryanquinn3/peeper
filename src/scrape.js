@@ -6,6 +6,10 @@ const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_b
 
 const trimNewlines = (text) => text.replace(/(?:\r\n|\r|\n)/g, '');
 
+const clean = (text) => text.replace(/\s{2,}/g, ' ');
+
+const fullTrim = compose(clean, trimNewlines);
+
 async function scrapeFromDetailPage(url){
   const scrapeDetails = await scrape(url, {
     title: '#titletextonly',
@@ -38,8 +42,8 @@ async function scrapeFromDetailPage(url){
   });
   return evolve({
     images: map(prop('link')),
-    body: trimNewlines,
-    address: trimNewlines,
+    body: fullTrim,
+    address: fullTrim,
   }, Object.assign(scrapeDetails, { url }));
 }
 async function scrapeListings(){
