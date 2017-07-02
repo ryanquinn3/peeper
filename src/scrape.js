@@ -23,7 +23,16 @@ async function scrapeFromDetailPage(url){
     body: '#postingbody',
     postInfo: {
       listItem: 'p.postinginfo',
-    }
+    },
+    address: '.mapaddress',
+    longitude: {
+      selector: '[data-longitude]',
+      attr: 'data-longitude',
+    },
+    latitude: {
+      selector: '[data-latitude]',
+      attr: 'data-latitude',
+    },
   });
   return evolve({
     images: map(prop('link'))
