@@ -6,6 +6,8 @@ const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_b
 
 //const exListing = 'https://sfbay.craigslist.org/sfc/apa/6201891273.html';
 
+const trimNewlines = (text) => text.replace(/(?:\r\n|\r|\n)/g, '');
+
 async function scrapeFromDetailPage(url){
   const scrapeDetails = await scrape(url, {
     title: '#titletextonly',
@@ -37,7 +39,9 @@ async function scrapeFromDetailPage(url){
     },
   });
   return evolve({
-    images: map(prop('link'))
+    images: map(prop('link')),
+    body: trimNewlines,
+    address: trimNewlines,
   }, Object.assign(scrapeDetails, { url }));
 }
 async function scrapeListings(){
