@@ -4,6 +4,8 @@ const { prop, map, compose, trim, evolve } = require('ramda');
 const baseUrl = 'https://sfbay.craigslist.org';
 const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_bedrooms=1&availabilityMode=0&laundry=1&laundry=4`;
 
+const trimNewlines = (text) => text.replace(/(?:\r\n|\r|\n)/g, '');
+
 async function scrapeFromDetailPage(url){
   const scrapeDetails = await scrape(url, {
     title: '#titletextonly',
@@ -35,7 +37,9 @@ async function scrapeFromDetailPage(url){
     },
   });
   return evolve({
-    images: map(prop('link'))
+    images: map(prop('link')),
+    body: trimNewlines,
+    address: trimNewlines,
   }, Object.assign(scrapeDetails, { url }));
 }
 async function scrapeListings(){
