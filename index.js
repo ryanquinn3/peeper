@@ -1,6 +1,10 @@
-
 const scrapeListings = require('./src/scrape');
+const { writeObjectToFile } = require('./src/persist');
 (async()=>{
   const scrapedListings = await scrapeListings();
-  console.log(scrapedListings)
+  await writeObjectToFile('./scraped.json', scrapedListings);
 })()
+
+
+
+

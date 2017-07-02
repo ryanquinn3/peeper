@@ -1,5 +1,5 @@
 const scrape = require('scrape-it');
-const { prop, map, compose, trim } = require('ramda');
+const { prop, map, compose, trim, evolve } = require('ramda');
 
 const baseUrl = 'https://sfbay.craigslist.org';
 const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_bedrooms=1&availabilityMode=0&laundry=1&laundry=4`;
@@ -27,8 +27,9 @@ async function scrapeFromDetailPage(url){
       listItem: 'p.postinginfo',
     }
   });
-  return Object.assign(scrapeDetails, { url });
-
+  return evolve({
+    images: map(prop('link'))
+  }, Object.assign(scrapeDetails, { url }));
 }
 async function scrapeListings(){
   const { apartments } = await scrape(searchUrl, {
