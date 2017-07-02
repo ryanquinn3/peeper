@@ -29,7 +29,6 @@ function defaultListing() {
 function handleAttributes(listAttributes){
   const attributes = {}
   var other = '';
-  console.log(listAttributes)
   
   for (var i in listAttributes){
     la = listAttributes[i];
@@ -64,7 +63,6 @@ function handleAttributes(listAttributes){
 
 
 function cleanListing(rawListing){
-  console.log(rawListing)
   rawListing.body = rawListing.body.replace(/\\\\n/g, "*");
   var newListing = defaultListing();
   const attributes = handleAttributes(rawListing.attributes);
@@ -84,11 +82,11 @@ function cleanListing(rawListing){
       longitude: Number(rawListing.longitude),
     },
   );
-  console.log(newListing);
 }
 
 
 module.exports = async (rawListings) => {
   const test = rawListings.slice(1,2);
-  return test.map(cleanListing);
+  const ret_test = test.map(cleanListing);
+  return ret_test
 };
