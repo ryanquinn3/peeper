@@ -30,7 +30,7 @@ class Sheet {
     if(this.instance) {
       return this.instance;
     }
-    await useServiceAccountAuth(require('../google_keys.json'));
+    await useServiceAccountAuth(keys);
     const { worksheets } = await getInfo();    
     const instance = worksheets.find((sheet) => {
       return sheet.title === this.title
