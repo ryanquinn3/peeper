@@ -1,10 +1,10 @@
 function defaultListing() {
   return {
-    id: 999,
+    clid: 999,
     alerted: 'N',
     status: 'Open',
     url: '',
-    title: '',
+    cltitle: '',
     address: '',
     rent: '',
     beds: '',
@@ -66,12 +66,12 @@ function cleanListing(rawListing){
   return Object.assign(newListing,
     attributes,
     {
-      title: rawListing.title,
+      cltitle: rawListing.title,
       rent: Number(rawListing.price.split('$')[1]),
-      id: Number(rawListing.postInfo[1].split(': ')[1]),
+      clid: Number(rawListing.postInfo[1].split(': ')[1]),
       posted: rawListing.postInfo[2].split(': ')[1],
       url: rawListing.url,
-      den: rawListing.body.match(/\Wden\W/g)? 'Y':'N',
+      den: rawListing.body.match(/\W[dD]en\W/g)? 'Y':'N',
       loft: rawListing.body.match(/loft/g)? 'Y':'N', 
       address: rawListing.address,
       latitude: Number(rawListing.latitude),
@@ -81,7 +81,5 @@ function cleanListing(rawListing){
 }
 
 module.exports = async (rawListings) => {
-  const cleaned = rawListings.map(cleanListing);
-  console.log('Finished normalizing', cleaned.length);
-  return cleaned
+  return rawListings.map(cleanListing);
 };

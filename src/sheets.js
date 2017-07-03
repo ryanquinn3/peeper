@@ -1,5 +1,5 @@
 const GoogleSpreadsheet = require('google-spreadsheet');
-const { omit, map } = require('ramda');
+const { omit, map, propEq } = require('ramda');
 
 const { promisify } = require('util');
 
@@ -23,9 +23,9 @@ class Sheet {
       return this.instance;
     }
     await useServiceAccountAuth(require('../google_keys.json'));
-    const { worksheets } = await getInfo();
+    const { worksheets } = await getInfo();    
     const instance = worksheets.find((sheet) => {
-      return sheet.title = this.title
+      return sheet.title === this.title
     });
     if(!instance){
       throw new Error('No sheet found with that title');
@@ -39,18 +39,24 @@ class Sheet {
   async getRows(rowOptions = { offset: 0 , limit: 100 }){
     await this.connect();
     const rows = await this.instance.getRows(rowOptions);
-    return removeXml(rows);
+    return rows
+  }
+
+  async getRowById(id){
+    const rows = await this.getRows();
+    return rows.find(propEq('id', id));
   }
 
   async addRow(row){
-    await this.connect();
+    await this.connect();  
     return await this.instance.addRow(row);
+  
   }
 
 }
-
-(async() => {
-  const resultsSheet = new Sheet('results');
-  const rows = await resultsSheet.getRows();
-  console.log(rows);
-})();
+module.exports.Sheet = Sheet;
+// (async() => {
+//   const resultsSheet = new Sheet('results');
+//   const rows = await resultsSheet.getRowById('6192399661');
+//   console.log(rows)
+// })();

@@ -1,6 +1,7 @@
 const scrapeListings = require('./src/scrape');
 const { writeObjectToFile } = require('./src/persist');
 const normalizeScrape = require('./src/normalize-scrape.js');
+const { Sheet } = require('./src/sheets');
 (async()=> {
   let scraped;
   try {
@@ -14,6 +15,8 @@ const normalizeScrape = require('./src/normalize-scrape.js');
 
   let listings = await normalizeScrape(scraped);
   await writeObjectToFile('./listings.json', {listings});
+  const scrapesSheet = new Sheet('scrapes');
+  await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
 })()
 
 
