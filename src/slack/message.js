@@ -1,6 +1,6 @@
 // https://api.slack.com/docs/messages/builder?msg=%7B%22text%22%3A%22%3C!here%3E%22%2C%22attachments%22%3A%5B%7B%22text%22%3A%22And%20here%E2%80%99s%20an%20attachment!%22%7D%5D%7D
 
-module.exports.makeSlackMessage = async(row) => (
+module.exports.makeSlackMessage = (row) => (
 {
   "text": "<!here>",
   "attachments": [

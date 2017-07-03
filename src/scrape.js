@@ -3,6 +3,7 @@ const { prop, map, compose, trim, evolve } = require('ramda');
 
 const baseUrl = 'https://sfbay.craigslist.org';
 const searchUrl = `${baseUrl}/search/sfc/apa?hasPic=1&nh=12&max_price=4000&min_bedrooms=1&availabilityMode=0&laundry=1&laundry=4`;
+const print = (...args) => console.log(`[${new Date().toLocaleTimeString()}] `, ...args);
 
 const trimNewlines = (text) => text.replace(/(?:\r\n|\r|\n)/g, '');
 
@@ -60,7 +61,7 @@ async function scrapeListings(){
       }
     }
   });
-  console.log(`Total results: ${apartments.length}`);
+  print(`Total results: ${apartments.length}`);
   const addBase = (url) => `${baseUrl}${url}`;
 
   const addBaseUrlsToResults = compose(
@@ -74,8 +75,8 @@ async function scrapeListings(){
 module.exports = async () => {
   try {
     const postingsList = await scrapeListings();
-    console.log('Scraped listings...');
-    console.log('Fetching details...'); 
+    print('Scraped listings...');
+    print('Fetching details...'); 
     const detailPromises = postingsList.map(scrapeFromDetailPage);
 
     return await Promise.all(detailPromises);
