@@ -3,10 +3,9 @@ const { writeObjectToFile } = require('./src/persist');
 const normalizeScrape = require('./src/normalize-scrape.js');
 const { Sheet } = require('./src/sheets');
 const processScrapeResults = require('./src/result-scrape-processor.js');
-
 const { sendSlackMessage } = require('./src/slack/index.js');
 const { makeSlackMessage } = require('./src/slack/message.js');
-const { saveListingImagesToTmp, convertImagesToGif } = require('./src/imaging');
+
 
 (async()=> {
   let scraped;
@@ -23,24 +22,16 @@ const { saveListingImagesToTmp, convertImagesToGif } = require('./src/imaging');
   await writeObjectToFile('./listings.json', {listings});
   const scrapesSheet = new Sheet('scrapes');
   const resultsSheet = new Sheet('results');
- // await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
-
+  await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
 
   scrapedRows = await scrapesSheet.getRows();
   resultsRows = await resultsSheet.getRows();
-  const outDir = await saveListingImagesToTmp(scrapedRows[0]);
-  const gifPath = await convertImagesToGif(outDir, scrapedRows[0].clid);
-  console.log(`Gif to saved to ${gifPath}`);
-  
   const newResults = await processScrapeResults(scrapedRows, resultsRows);
   
+  await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
 
-
-  // const practiceRow = resultsRows[0];
-  // const message = await makeSlackMessage(practiceRow);
-  // sendSlackMessage(message);
-
-  // await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
+  await Promise.all(newResults.map((res) => console.log(makeSlackMessage(res))));
+  //await Promise.all(newResults.map((res) => sendSlackMessage(makeSlackMessage(res))));
 
 })()
 
