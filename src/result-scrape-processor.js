@@ -1,9 +1,10 @@
+const { prop, map } = require('ramda');
 
-
+const pickClid = map(prop('clid'));
 async function processScrapeResults(scrapesRows, resultsRows) {
 
-  const scrapeIDs = scrapesRows.map((row) => row.clid);
-  const resultIDs = resultsRows.map((row) => row.clid);
+  const scrapeIDs = pickClid(scrapesRows);
+  const resultIDs = pickClid(resultsRows);
 
   var newIDSet = new Set(scrapeIDs),
     resultIDSet = new Set(resultIDs);
