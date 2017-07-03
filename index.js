@@ -25,8 +25,10 @@ const processScrapeResults = require('./src/result-scrape-processor.js');
 
   scrapedRows = await scrapesSheet.getRows();
   resultsRows = await resultsSheet.getRows();
-  const newRows = await processScrapeResults(scrapedRows, resultsRows);
-  
+  const newResults = await processScrapeResults(scrapedRows, resultsRows);
+
+  await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
+
 })()
 
 
