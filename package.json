@@ -19,7 +19,8 @@
     "start": "node index.js",
     "sheet": "node ./src/sheets.js",
     "process": "node ./src/result-scrape-processor.js",
-    "deploy": "shipit production ls"
+    "deploy": "shipit production ls",
+    "deploy:nginx": "sh ./scripts/nginx-deploy.sh"
   },
   "devDependencies": {
     "shipit-cli": "^3.0.0"
