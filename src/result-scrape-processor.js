@@ -1,4 +1,5 @@
 const { prop, map } = require('ramda');
+//const giffyPoo = require('./src/imaging/.js');
 
 const pickClid = map(prop('clid'));
 async function processScrapeResults(scrapesRows, resultsRows) {
@@ -22,7 +23,6 @@ async function processScrapeResults(scrapesRows, resultsRows) {
     */
     gifURL = '';
     Object.assign(row, {
-      alerted: 'N',
       status: 'Open',
       gif: gifURL,
     })

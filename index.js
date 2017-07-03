@@ -4,6 +4,9 @@ const normalizeScrape = require('./src/normalize-scrape.js');
 const { Sheet } = require('./src/sheets');
 const processScrapeResults = require('./src/result-scrape-processor.js');
 
+const { sendSlackMessage } = require('./src/slack/index.js');
+const { makeSlackMessage } = require('./src/slack/message.js');
+
 
 (async()=> {
   let scraped;
@@ -27,7 +30,11 @@ const processScrapeResults = require('./src/result-scrape-processor.js');
   resultsRows = await resultsSheet.getRows();
   const newResults = await processScrapeResults(scrapedRows, resultsRows);
 
-  await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
+  // const practiceRow = resultsRows[0];
+  // const message = await makeSlackMessage(practiceRow);
+  // sendSlackMessage(message);
+
+  // await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
 
 })()
 

@@ -1,7 +1,6 @@
 function defaultListing() {
   return {
     clid: 999,
-    alerted: 'N',
     status: 'Open',
     url: '',
     cltitle: '',
