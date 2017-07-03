@@ -33,7 +33,6 @@ const { makeSlackMessage } = require('./src/slack/message.js');
   
   await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
 
-  //await Promise.all(newResults.map((res) => console.log(makeSlackMessage(res))));
   await Promise.all(newResults.map((res) => sendSlackMessage(makeSlackMessage(res))));
   }catch(e){
     console.error(e);
