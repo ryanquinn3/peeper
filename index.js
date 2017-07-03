@@ -3,14 +3,10 @@ const { writeObjectToFile } = require('./src/persist');
 const normalizeScrape = require('./src/normalize-scrape.js');
 const { Sheet } = require('./src/sheets');
 const processScrapeResults = require('./src/result-scrape-processor.js');
-<<<<<<< Updated upstream
 
 const { sendSlackMessage } = require('./src/slack/index.js');
 const { makeSlackMessage } = require('./src/slack/message.js');
-
-=======
 const { saveListingImagesToTmp, convertImagesToGif } = require('./src/imaging');
->>>>>>> Stashed changes
 
 (async()=> {
   let scraped;
@@ -39,13 +35,11 @@ const { saveListingImagesToTmp, convertImagesToGif } = require('./src/imaging');
   const newResults = await processScrapeResults(scrapedRows, resultsRows);
   
 
-<<<<<<< Updated upstream
+
   // const practiceRow = resultsRows[0];
   // const message = await makeSlackMessage(practiceRow);
   // sendSlackMessage(message);
 
-=======
->>>>>>> Stashed changes
   // await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
 
 })()
