@@ -12,6 +12,14 @@ const getInfo = promisify(sheet.getInfo);
 
 const removeXml = map(omit('_xml'));
 
+let keys;
+
+try {
+  keys = require('../google_keys.json');
+} catch(e){
+  keys = require('/keys/google_keys.json');
+}
+
 class Sheet {
   constructor(title){
     this.title = title;

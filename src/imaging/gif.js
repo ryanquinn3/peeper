@@ -3,10 +3,10 @@ const { promisify } = require('util');
 
 const execute = promisify(exec);
 
-const isProd = false;
+const isProd = true;
 
-const writeDir = isProd ? '/usr/share/nginx/html/' : '/tmp/gifs-out/';
-const serveDir = isProd ? 'http://104.131.135.228' : writeDir;
+const writeDir = isProd ? '/www/' : '/tmp/gifs-out/';
+const serveDir = isProd ? 'http://104.131.135.228/' : writeDir;
 const delay = 240;
 
 module.exports.convertImagesToGif = async(imageDir, clid) => {
