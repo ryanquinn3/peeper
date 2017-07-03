@@ -1,6 +1,6 @@
 const { saveListingImagesToTmp, convertImagesToGif } = require('./imaging');
 
-const { prop, map, pick, compose, set, lensProp } = require('ramda');
+const { prop, map, pick, compose, set, lensProp, values } = require('ramda');
 
 
 const pickClid = map(prop('clid'));
@@ -13,16 +13,22 @@ async function determineNewResults(scrapesRows, resultsRows) {
   const newIDSet = new Set(scrapeIDs);
   const resultIDSet = new Set(resultIDs);
 
+  console.log(`Size of scrape set: ${newIDSet.size}`);
+  console.log(`Size of result set: ${resultIDSet.size}`);
+
   for (var elem of resultIDSet) {
     newIDSet.delete(elem)
   }
 
-  const newResults = scrapesRows
-    .filter((row) => newIDSet.has(row.clid))
+  const rowsPendingAdd = scrapesRows
+    .filter((row) => newIDSet.has(row.clid));
+
+  const rowsKeyByClid = rowsPendingAdd
+    .reduce((accum, result) => Object.assign(accum, { [result.clid]: result }), {});
+  
+  return values(rowsKeyByClid)
     .map(convertScrapeRowToResult)
     .map(set(lensProp('status'), 'Open'));
-    
-  return newResults;
 }
 
 function convertScrapeRowToResult(scrapeRow){
@@ -60,6 +66,10 @@ async function makeAndPublishGif(row){
 //processScrapeResults
 module.exports = async (scrapesRows, resultsRows) => {
   const results = await determineNewResults(scrapesRows, resultsRows);
-  console.log('Found ', results.length, ' new entries!')
-  return await Promise.all(results.map(makeAndPublishGif));
+  console.log('Found ', results.length, ' new entries!');
+
+  for(let res of results) {
+    res = await makeAndPublishGif(res); 
+  }
+  return results;
 };

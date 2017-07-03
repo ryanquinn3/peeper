@@ -10,8 +10,15 @@ const tmpImageFilename = (scrapedRow) => (_, index) => `${tmpDir}${scrapedRow.cl
 
 async function saveImageToDisk(imageUrl, outPath){
   const response = await axios.get(imageUrl, streamOptions);
-  response.data.pipe(fs.createWriteStream(outPath));
-  return outPath;
+
+  return new Promise((resolve, reject) => {
+    const stream = fs.createWriteStream(outPath)
+    response.data.pipe(stream);
+    stream.on('close', () => {
+      resolve(outPath);
+    });
+    stream.on('error', () => reject('Wtf'));
+  });
 };
 
 
