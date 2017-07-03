@@ -72,10 +72,16 @@ async function scrapeListings(){
 }
 
 module.exports = async () => {
-  const postingsList = await scrapeListings();
+  try {
+    const postingsList = await scrapeListings();
+    console.log('Scraped listings...');
+    console.log('Fetching details...'); 
+    const detailPromises = postingsList.map(scrapeFromDetailPage);
 
-  const detailPromises = postingsList.map(scrapeFromDetailPage);
-
-  return await Promise.all(detailPromises);
+    return await Promise.all(detailPromises);
+  }catch(e){
+    console.log(e);
+  }
+  
 
 };
