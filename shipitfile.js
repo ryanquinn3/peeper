@@ -15,7 +15,5 @@ module.exports = (shipit) => {
 
   shipit.task('copy-nginx', () => shipit.remoteCopy('./nginx.conf', '/etc/nginx/nginx.conf'));
   shipit.task('deploy-nginx', ['copy-nginx'], () => shipit.remote('systemctl restart nginx'));
-  shipit.on('deployed', () => {
-    return shipit.remote('cd /app && yarn');
-  })
+  shipit.on('deployed', { cwd: '/app/current' }, () => shipit.remote('yarn'));
 };
