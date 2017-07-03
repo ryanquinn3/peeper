@@ -2,6 +2,9 @@ const scrapeListings = require('./src/scrape');
 const { writeObjectToFile } = require('./src/persist');
 const normalizeScrape = require('./src/normalize-scrape.js');
 const { Sheet } = require('./src/sheets');
+const processScrapeResults = require('./src/result-scrape-processor.js');
+
+
 (async()=> {
   let scraped;
   try {
@@ -16,7 +19,14 @@ const { Sheet } = require('./src/sheets');
   let listings = await normalizeScrape(scraped);
   await writeObjectToFile('./listings.json', {listings});
   const scrapesSheet = new Sheet('scrapes');
-  await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
+  const resultsSheet = new Sheet('results');
+ // await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
+
+
+  scrapedRows = await scrapesSheet.getRows();
+  resultsRows = await resultsSheet.getRows();
+  const newRows = await processScrapeResults(scrapedRows, resultsRows);
+  
 })()
 
 

@@ -55,8 +55,3 @@ class Sheet {
 
 }
 module.exports.Sheet = Sheet;
-// (async() => {
-//   const resultsSheet = new Sheet('results');
-//   const rows = await resultsSheet.getRowById('6192399661');
-//   console.log(rows)
-// })();

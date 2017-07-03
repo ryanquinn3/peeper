@@ -19,6 +19,7 @@ function defaultListing() {
     available: '',
     latitude: '',
     longitude: '',
+    scraped: new Date(),
   }
 }
 
@@ -76,6 +77,7 @@ function cleanListing(rawListing){
       address: rawListing.address,
       latitude: Number(rawListing.latitude),
       longitude: Number(rawListing.longitude),
+      images: rawListing.images.join(','),
     },
   );
 }
