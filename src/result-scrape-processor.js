@@ -1,7 +1,7 @@
-const { saveListingImagesToTmp, convertImagesToGif } = require('./imaging');
-
 const { prop, map, pick, compose, set, lensProp, values } = require('ramda');
-const print = (...args) => console.log(`[${new Date().toLocaleTimeString()}] `, ...args);
+
+const { saveListingImagesToTmp, convertImagesToGif } = require('./imaging');
+const { print } = require('./logging');
 
 const pickClid = map(prop('clid'));
 

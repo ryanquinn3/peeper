@@ -1,24 +1,19 @@
 const GoogleSpreadsheet = require('google-spreadsheet');
 const { omit, map, propEq } = require('ramda');
-
+const config = require('config');
 const { promisify } = require('util');
 
-const sheetId = '1EvjG_nq2lQBbVS89c22-rFXdyq0FcTldq-zsQd5YtIY';
+const keys = require(config.get('google.keyFile') || '../google_keys.json');
+
+const sheetId = config.get('google.sheetId');
 
 const sheet = new GoogleSpreadsheet(sheetId);
-
 const useServiceAccountAuth = promisify(sheet.useServiceAccountAuth);
+
 const getInfo = promisify(sheet.getInfo);
 
 const removeXml = map(omit('_xml'));
 
-let keys;
-
-try {
-  keys = require('../google_keys.json');
-} catch(e){
-  keys = require('/keys/google_keys.json');
-}
 
 class Sheet {
   constructor(title){
@@ -46,8 +41,7 @@ class Sheet {
 
   async getRows(rowOptions = { offset: 0 , limit: 100 }){
     await this.connect();
-    const rows = await this.instance.getRows(rowOptions);
-    return rows
+    return await this.instance.getRows(rowOptions);
   }
 
   async getRowById(id){

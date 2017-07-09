@@ -9,6 +9,7 @@
   "dependencies": {
     "@slack/client": "^3.10.0",
     "axios": "^0.16.2",
+    "config": "^1.26.1",
     "google-spreadsheet": "^2.0.4",
     "node-slack": "^0.0.7",
     "ramda": "^0.24.1",
