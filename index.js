@@ -28,17 +28,20 @@ const print = (...args) => {
     print('Adding to scrapes sheet');
     await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
 
-    scrapedRows = await scrapesSheet.getRows();
-    resultsRows = await resultsSheet.getRows();
+    const scrapedRows = await scrapesSheet.getRows();
+    const resultsRows = await resultsSheet.getRows();
     print('Processing new scrapes');
     const newResults = await processScrapeResults(scrapedRows, resultsRows);
 
     if(newResults.length === 0){
       await sendSlackMessage({
-        text: 'No new apartments found today.'
+        text: `Scrape was successful. Found ${listings.length} listings but none were new.`
       })
     } else {
       await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
+      await sendSlackMessage({
+        text: `Scrape was successful. Found ${listings.length} listings and ${ newResults.length } were new.`
+      });
       await Promise.all(newResults.map((res) => sendSlackMessage(makeSlackMessage(res))));
     }
     
