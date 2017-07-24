@@ -22,6 +22,12 @@ function defaultListing() {
   }
 }
 
+const na = {
+  split(){
+    return ['N/A', 'N/A'];
+  }
+};
+
 function handleAttributes(listAttributes){
   const attributes = {}
   var other = '';
@@ -31,11 +37,11 @@ function handleAttributes(listAttributes){
     if (la.includes('BR')){
       var deets = la.split('/');
       Object.assign(attributes, {
-        beds: Number(deets[0].split('B')[0]),
-        baths: Number(deets[1].split('B')[0])
+        beds: Number((deets[0] || na).split('B')[0]),
+        baths: Number((deets[1] || na).split('B')[0])
       })
     } else if(la.includes('ft2')){
-      Object.assign(attributes, { ft2: Number(la.split('ft2')[0])} )
+      Object.assign(attributes, { ft2: Number((la || na).split('ft2')[0])} )
     } else if(la.includes('wooof')){
       Object.assign(attributes, { dogs: 'Y' } )
     } else if(la.includes('purrr')){
@@ -67,9 +73,9 @@ function cleanListing(rawListing){
     attributes,
     {
       cltitle: rawListing.title,
-      rent: Number(rawListing.price.split('$')[1]),
-      clid: Number(rawListing.postInfo[1].split(': ')[1]),
-      posted: rawListing.postInfo[2].split(': ')[1],
+      rent: Number((rawListing.price || na).split('$')[1]),
+      clid: Number((rawListing.postInfo[1] || na).split(': ')[1]),
+      posted: (rawListing.postInfo[2] || na).split(': ')[1],
       url: rawListing.url,
       den: rawListing.body.match(/\W[dD]en\W/g)? 'Y':'N',
       loft: rawListing.body.match(/loft/g)? 'Y':'N', 
