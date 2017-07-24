@@ -3,7 +3,7 @@ const { promisify } = require('util');
 
 const execute = promisify(exec);
 
-const isProd = true;
+const isProd = process.NODE_ENV === 'production';
 
 const writeDir = isProd ? '/www/' : '/tmp/gifs-out/';
 const serveDir = isProd ? 'http://104.131.135.228/' : writeDir;
@@ -23,4 +23,4 @@ module.exports.convertImagesToGif = async(imageDir, clid) => {
   }
   await execute(`rm -r ${imageDir}`);
   return `${serveDir}${clid}.gif`;
-}
+};

@@ -6,14 +6,9 @@ const processScrapeResults = require('./src/result-scrape-processor.js');
 const { sendSlackMessage } = require('./src/slack/index.js');
 const { makeSlackMessage } = require('./src/slack/message.js');
 
-const config = require('config');
+const { print } = require('./src/logging');
 
-const print = (...args) => {
-  const now = new Date();
-  const time = now.toLocaleTimeString();
-  const date = now.toDateString();
-  console.log(`[${date} ${time}] `, ...args);
-};
+const config = require('config');
 
 (async()=> {
 
@@ -52,7 +47,7 @@ const print = (...args) => {
       attachments: [
         {
           title: 'Error dump:',
-          text: e.stack,
+          text: e.message,
         }
       ]
     })
