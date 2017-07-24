@@ -9,6 +9,7 @@ const tmpDir = '/tmp/';
 const tmpImageFilename = (scrapedRow) => (_, index) => `${tmpDir}${scrapedRow.clid}/${index}.jpg`;
 
 async function saveImageToDisk(imageUrl, outPath){
+
   const response = await axios.get(imageUrl, streamOptions);
 
   return new Promise((resolve, reject) => {
@@ -19,11 +20,11 @@ async function saveImageToDisk(imageUrl, outPath){
     });
     stream.on('error', () => reject('Wtf'));
   });
-};
+}
 
 
 module.exports.saveListingImagesToTmp = async(listing) => {
-  const images = listing.images.split(',');
+  const images = listing.images.split(',').filter(Boolean);
   const outDir = `${tmpDir}${listing.clid}`;
   const paths = images.map(tmpImageFilename(listing));
   const inOut = zip(images, paths);  
