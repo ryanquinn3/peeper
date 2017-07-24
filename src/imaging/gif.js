@@ -3,7 +3,7 @@ const { promisify } = require('util');
 
 const execute = promisify(exec);
 
-const isProd = process.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV === 'production';
 
 const writeDir = isProd ? '/www/' : '/tmp/gifs-out/';
 const serveDir = isProd ? 'http://104.131.135.228/' : writeDir;
