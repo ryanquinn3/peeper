@@ -16,10 +16,11 @@ module.exports.convertImagesToGif = async(imageDir, clid) => {
   }
   catch(e){
     console.error(e);
+    return `${serveDir}/404.html`;
   }
   const { stdout, stdErr } = await execute(`convert -delay ${delay} -loop 0 ${imageDir}/*.jpg ${gifPath}`);
   if(stdErr){
-    throw new Error('Error occurred making gif');
+    return `${serveDir}/404.html`;
   }
   await execute(`rm -r ${imageDir}`);
   return `${serveDir}${clid}.gif`;
