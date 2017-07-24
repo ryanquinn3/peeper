@@ -88,5 +88,14 @@ function cleanListing(rawListing){
 }
 
 module.exports = async (rawListings) => {
-  return rawListings.map(cleanListing);
+  const cleanListings = [];
+
+  for(const raw in rawListings){
+    try{
+      cleanListings.push(cleanListing(raw));
+    }
+    catch(e){}
+  }
+
+  return cleanListings;
 };
