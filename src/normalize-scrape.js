@@ -1,3 +1,5 @@
+const { print } = require('./logging');
+
 function defaultListing() {
   return {
     clid: 999,
@@ -23,8 +25,11 @@ function defaultListing() {
 }
 
 const na = {
+  0: 'N/A',
+  1: 'N/A',
+  2: 'N/A',
   split(){
-    return ['N/A', 'N/A'];
+    return ['N/A', 'N/A', 'N/A'];
   }
 };
 
@@ -65,15 +70,17 @@ function handleAttributes(listAttributes){
 
 
 function cleanListing(rawListing){
-  rawListing.body = rawListing.body.replace(/\\\\n/g, "*");
-  var newListing = defaultListing();
+  rawListing.body = (rawListing.body || '').replace(/\\\\n/g, "*");
+  rawListing.postInfo = rawListing.postInfo || na;
+
   const attributes = handleAttributes(rawListing.attributes);
   
-  return Object.assign(newListing,
+  return Object.assign(
+    defaultListing(),
     attributes,
     {
       cltitle: rawListing.title,
-      rent: Number((rawListing.price || na).split('$')[1]),
+      rent: Number(rawListing.price.split('$')[1]),
       clid: Number((rawListing.postInfo[1] || na).split(': ')[1]),
       posted: (rawListing.postInfo[2] || na).split(': ')[1],
       url: rawListing.url,
@@ -90,11 +97,13 @@ function cleanListing(rawListing){
 module.exports = async (rawListings) => {
   const cleanListings = [];
 
-  for(const raw in rawListings){
+  for(const raw of rawListings){
     try{
       cleanListings.push(cleanListing(raw));
     }
-    catch(e){}
+    catch(e){
+      print(raw);
+    }
   }
 
   return cleanListings;

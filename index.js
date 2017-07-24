@@ -22,15 +22,17 @@ const config = require('config');
     const resultsSheet = new Sheet(config.get('google.resultWorkbookName'));
     print('Adding to scrapes sheet');
 
-    const writtenListings = [];
-    for(const listing of listings){
-      try{
-        await scrapesSheet.addRow(listing);
-        writtenListings.push(listing);
-      } catch(e){}
-    }
-
-    //await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
+    // const writtenListings = [];
+    // for(const listing of listings){
+    //   try{
+    //     await scrapesSheet.addRow(listing);
+    //     writtenListings.push(listing);
+    //   } catch(e){
+    //     print('Failed scrape')
+    //   }
+    // }
+    print(`Size of listings: ${listings.length}`);
+    await Promise.all(listings.map((listing) => scrapesSheet.addRow(listing)));
 
     const scrapedRows = await scrapesSheet.getRows();
     const resultsRows = await resultsSheet.getRows();
@@ -39,12 +41,12 @@ const config = require('config');
 
     if(newResults.length === 0){
       await sendSlackMessage({
-        text: `Scrape was successful. Found ${writtenListings.length} listings but none were new.`
+        text: `Scrape was successful. Found ${listings.length} listings but none were new.`
       })
     } else {
       await Promise.all(newResults.map((res) => resultsSheet.addRow(res)));
       await sendSlackMessage({
-        text: `Scrape was successful. Found ${writtenListings.length} listings and ${ newResults.length } were new.`
+        text: `Scrape was successful. Found ${listings.length} listings and ${ newResults.length } were new.`
       });
       await Promise.all(newResults.map((res) => sendSlackMessage(makeSlackMessage(res))));
     }
@@ -56,7 +58,7 @@ const config = require('config');
       attachments: [
         {
           title: 'Error dump:',
-          text: e.message,
+          text: `${e.message} ${e.stack}`,
         }
       ]
     })
